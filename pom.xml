@@ -8,11 +8,11 @@
   <packaging>jar</packaging>
 
   <name>loan-application-405234</name>
-    <properties>
+  <properties>
 
     <!-- TODO Update to your own Docker repository or Docker Hub scope -->
-    <dockerImage>my-docker-repo/${project.artifactId}</dockerImage>
-    <dockerTag>${project.version}-${build.timestamp}</dockerTag>
+    <dockerImage>kalix-training/${project.artifactId}</dockerImage>
+    <dockerTag>${project.version}</dockerTag>
     <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
     <mainClass>io.kx.loanapp.Main</mainClass>
 
@@ -118,6 +118,7 @@
         <configuration>
           <images>
             <image>
+              <registry>registry.digitalocean.com</registry>
               <name>${dockerImage}:%l</name>
               <build>
                 <!-- Base Docker image which contains jre-->
