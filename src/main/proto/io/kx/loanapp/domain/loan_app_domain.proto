@@ -34,9 +34,12 @@ message Submitted {
 
 message Approved {
   google.protobuf.Timestamp event_timestamp = 1;
+  string loan_app_id = 2;
 }
 
 message Declined {
   google.protobuf.Timestamp event_timestamp = 1;
   string reason = 2;
+  string loan_app_id = 3;
+
 }

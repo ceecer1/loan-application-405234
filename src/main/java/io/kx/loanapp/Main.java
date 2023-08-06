@@ -1,5 +1,6 @@
 package io.kx.loanapp;
 
+import io.kx.loanapp.action.LoanAppServiceActionImpl;
 import io.kx.loanapp.domain.LoanAppEntity;
 import io.kx.loanapp.view.LoanAppByStatusView;
 import kalix.javasdk.Kalix;
@@ -13,20 +14,21 @@ import org.slf4j.LoggerFactory;
 
 public final class Main {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
-  public static Kalix createKalix() {
-    // The KalixFactory automatically registers any generated Actions, Views or Entities,
-    // and is kept up-to-date with any changes in your protobuf definitions.
-    // If you prefer, you may remove this and manually register these components in a
-    // `new Kalix()` instance.
-    return KalixFactory.withComponents(
-            LoanAppEntity::new,
-            LoanAppByStatusView::new);
-  }
+    public static Kalix createKalix() {
+        // The KalixFactory automatically registers any generated Actions, Views or Entities,
+        // and is kept up-to-date with any changes in your protobuf definitions.
+        // If you prefer, you may remove this and manually register these components in a
+        // `new Kalix()` instance.
+        return KalixFactory.withComponents(
+                LoanAppEntity::new,
+                LoanAppByStatusView::new,
+                LoanAppServiceActionImpl::new);
+    }
 
-  public static void main(String[] args) throws Exception {
-    LOG.info("starting the Kalix service");
-    createKalix().start();
-  }
+    public static void main(String[] args) throws Exception {
+        LOG.info("starting the Kalix service");
+        createKalix().start();
+    }
 }

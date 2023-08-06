@@ -67,6 +67,7 @@ public class LoanAppEntity extends AbstractLoanAppEntity {
     } else if (currentState.getStatus() == LoanAppDomain.LoanAppDomainStatus.STATUS_IN_REVIEW) {
       LoanAppDomain.Approved approvedEvent = LoanAppDomain.Approved.newBuilder()
               .setEventTimestamp(Timestamps.fromMillis(System.currentTimeMillis()))
+              .setLoanAppId(approveCommand.getLoanAppId())
               .build();
       return effects().emitEvent(approvedEvent).thenReply(any -> Empty.getDefaultInstance());
     } else if (currentState.getStatus() == LoanAppDomain.LoanAppDomainStatus.STATUS_APPROVED) {
@@ -78,7 +79,20 @@ public class LoanAppEntity extends AbstractLoanAppEntity {
 
   @Override
   public Effect<Empty> decline(LoanAppDomain.LoanAppDomainState currentState, LoanAppApi.DeclineCommand declineCommand) {
-    return effects().error("The command handler for `Decline` is not implemented, yet");
+    if (currentState.equals(LoanAppDomain.LoanAppDomainState.getDefaultInstance())) {
+      return effects().error("Not found");
+    } else if (currentState.getStatus() == LoanAppDomain.LoanAppDomainStatus.STATUS_IN_REVIEW) {
+      LoanAppDomain.Declined declineEvent = LoanAppDomain.Declined.newBuilder()
+              .setReason(declineCommand.getReason())
+              .setLoanAppId(declineCommand.getLoanAppId())
+              .setEventTimestamp(Timestamps.fromMillis(System.currentTimeMillis()))
+              .build();
+      return effects().emitEvent(declineEvent).deleteEntity().thenReply(any -> Empty.getDefaultInstance());
+    } else if (currentState.getStatus() == LoanAppDomain.LoanAppDomainStatus.STATUS_DECLINED) {
+      return effects().reply(Empty.getDefaultInstance());
+    } else {
+      return effects().error("Something wrong");
+    }
   }
 
   @Override
@@ -101,7 +115,10 @@ public class LoanAppEntity extends AbstractLoanAppEntity {
   }
   @Override
   public LoanAppDomain.LoanAppDomainState declined(LoanAppDomain.LoanAppDomainState currentState, LoanAppDomain.Declined declined) {
-    throw new RuntimeException("The event handler for `Declined` is not implemented, yet");
+    return currentState.toBuilder()
+            .setStatus(LoanAppDomain.LoanAppDomainStatus.STATUS_DECLINED)
+            .setLastUpdateTimestamp(declined.getEventTimestamp())
+            .build();
   }
 
 }
