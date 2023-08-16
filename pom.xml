@@ -11,7 +11,7 @@
   <properties>
 
     <!-- TODO Update to your own Docker repository or Docker Hub scope -->
-    <dockerImage>kalix-training/${project.artifactId}</dockerImage>
+    <dockerImage>ceecer1/${project.artifactId}</dockerImage>
     <dockerTag>${project.version}</dockerTag>
     <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
     <mainClass>io.kx.loanapp.Main</mainClass>
@@ -19,7 +19,7 @@
     <jdk.target>11</jdk.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <kalix-sdk.version>1.3.1</kalix-sdk.version>
+    <kalix-sdk.version>1.3.2</kalix-sdk.version>
     <akka-grpc.version>2.1.4</akka-grpc.version>
   </properties>
 
@@ -118,7 +118,7 @@
         <configuration>
           <images>
             <image>
-              <registry>registry.digitalocean.com</registry>
+<!--              <registry>registry.digitalocean.com</registry>-->
               <name>${dockerImage}:%l</name>
               <build>
                 <!-- Base Docker image which contains jre-->
